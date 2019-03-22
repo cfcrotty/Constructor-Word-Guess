@@ -3,7 +3,7 @@ const colors = require('colors');
 var fs = require("fs");
 const word = require("./Word.js");
 
-const words = ["javascript", "server side","template literal","java","mysql"];
+const words = ["javascript","server side","template literal","java","mysql"];
 var remainingGuess = 10;
 var guessWord = "";
 var canPlay = true;
@@ -43,7 +43,7 @@ function askQuestion() {
         if (remainingGuess > 0) playGame();
         //add code to play again once it has been guess and there are still words in array
         else {
-            console.log("Sorry! Next word...");
+            console.log("😥 You were not able to guess the word.\n".green);
             canPlay = true;
             remainingGuess = 10;
             lettersGuessed = [];
@@ -57,6 +57,12 @@ function askQuestion() {
 function getRandomWord() {
     var idx = Math.floor(Math.random() * words.length);
     var theWord = words[idx].trim().replace(/[^a-zA-Z ]/g, "");
+    if (wordsDone.includes(theWord)) getRandomWord();
+    if (wordsDone.length===words.length) {
+        console.log("Congratulations! You have guessed all the words.".yellow);
+        console.log("Game Over!".yellow);
+        process.exit();
+    }
     return theWord;
 }
 /**
@@ -69,10 +75,11 @@ function playGame() {
         guessWord = new word(guessWord);
     }
     if (!guessWord.isWordGuessed()) {
-        console.log(guessWord.wordString());
+        console.log("\n"+guessWord.wordString());
         askQuestion();
     } else {
-        console.log("You got it right! Next word...");
+        wordsDone.push(guessWord);
+        console.log("😊 You got it right!\n".green);
         //add code to play again once it has been guess and there are still words in array
         remainingGuess = 10;
         canPlay = true;
@@ -87,7 +94,7 @@ function playGame() {
 function checkCharacter(char) {
     var isTrue = guessWord.checkCharacter(char);
     if (!isTrue) {remainingGuess--;
-    console.log(`You have ${remainingGuess} remaining guess.`);
+    console.log(`You have ${remainingGuess} remaining guess.`.red);
     }
 }
 
@@ -100,7 +107,7 @@ function playNextWord(){
         }
     ]).then(function (inquirerResponse) {
         if (inquirerResponse.playAgain) {
-            playGame()
+            playGame();
         } else {
             process.exit();
         }
