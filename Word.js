@@ -21,10 +21,20 @@ var Word = function(word) {
             let isTrue1 = this.wordArray[i].updateLetter(char);
             if (isTrue1) isTrue = true;
         }
-        if(isTrue) console.log("Correct");
-        else console.log("Incorrect");
+        if(isTrue) console.log("Correct!");
+        else console.log("Incorrect!");
         return isTrue;
     };
+    this.isWordGuessed = function () {
+        let numberOfCharGuessed = 0;
+        for (let i=0;i<this.word.length;i++) {
+            if(this.wordArray[i].isGuessed){
+                numberOfCharGuessed++;
+            }
+        }
+        if (numberOfCharGuessed===this.word.length) return true;
+        else return false;
+    }
   };
 
   /*

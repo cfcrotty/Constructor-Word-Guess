@@ -9,6 +9,7 @@ var guessWord = "";
 var canPlay = true;
 var numWord = 0;
 var lettersGuessed = [];
+var wordsDone = [];
 
 /*
 const guessWord = new word("the");
@@ -17,17 +18,20 @@ console.log(guessWord.checkCharacter("t"));
 console.log(guessWord.checkCharacter("h"));
 console.log(guessWord.wordString());
 */
-console.log("Word Guess Game Starting...");
+console.log("Word Guess Game Starting...".cyan);
+console.log("Type exit then press Enter to end the game.".red);
 //askQuestion();
 function askQuestion() {
     inquirer.prompt([
         {
             type: "input",
-            message: "Guess a letter!".cyan.italic.bold,
+            message: "Guess a letter!".magenta.italic.bold,
             name: "letter",
             validate: function (res) {
                 if (res.match(/[a-z|A-Z]/i) && res.length == 1) {
                     return true;
+                } else if (res.toLowerCase()==="exit") {
+                    process.exit();
                 } else {
                     return "Please enter a letter.".red;
                 }
@@ -42,6 +46,14 @@ function askQuestion() {
             console.log("You already used this letter.");
         }
         if (remainingGuess > 0) playGame();
+        //add code to play again once it has been guess and there are still words in array
+        else {
+            console.log("Sorry! Next word...");
+            canPlay = true;
+            remainingGuess = 10;
+            lettersGuessed = [];
+            playGame();
+        }
     });
 }
 
@@ -57,14 +69,24 @@ function playGame() {
         canPlay = false;
         guessWord = new word(guessWord);
     }
-    console.log(guessWord.wordString());
-    askQuestion();
+    if (!guessWord.isWordGuessed()) {
+        console.log(guessWord.wordString());
+        askQuestion();
+    } else {
+        console.log("You got it right! Next word...");
+        //add code to play again once it has been guess and there are still words in array
+        remainingGuess = 10;
+        canPlay = true;
+        lettersGuessed = [];
+        playGame();
+    }
 }
 
 function checkCharacter(char) {
     var isTrue = guessWord.checkCharacter(char);
-    if (!isTrue) remainingGuess--;
+    if (!isTrue) {remainingGuess--;
     console.log(`You have ${remainingGuess} remaining guess.`);
+    }
     //console.log(guessWord);
 }
 playGame();

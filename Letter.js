@@ -9,7 +9,7 @@ const Letter = function (letter) {
         if (this.letter === " ") {
             this.isGuessed = true;
         } else {
-            if (this.letter === varLetter) {
+            if (this.letter.toLowerCase() === varLetter.toLowerCase()) {
                 this.isGuessed = true;
                 return true;
             }
