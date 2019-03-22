@@ -1,0 +1,24 @@
+{
+  "name": "Constructor-Word-Guess",
+  "version": "1.0.0",
+  "description": "Constructor Word Guess Homework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cfcrotty/Constructor-Word-Guess.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cfcrotty/Constructor-Word-Guess/issues"
+  },
+  "homepage": "https://github.com/cfcrotty/Constructor-Word-Guess#readme",
+  "dependencies": {
+    "colors": "^1.3.3",
+    "inquirer": "^6.2.2"
+  }
+}
