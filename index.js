@@ -3,7 +3,7 @@ const colors = require('colors');
 var fs = require("fs");
 const word = require("./Word.js");
 
-const words = ["javascript","server side","template literal","java","mysql"];
+const words = ["Javascript","Server Side","Template Literal","Java","MYSQL"];
 var remainingGuess = 10;
 var guessWord = "";
 var canPlay = true;
@@ -44,7 +44,7 @@ function askQuestion() {
         if (remainingGuess > 0) {
             playGame();
         }else {
-            console.log("😥 You were not able to guess the word.\n".green);
+            console.log("\n😥 You were not able to guess the word.\n".green);
             canPlay = true;
             remainingGuess = 10;
             lettersGuessed = [];
@@ -58,11 +58,7 @@ function askQuestion() {
 function getRandomWord() {
     var idx = Math.floor(Math.random() * words.length);
     var theWord = words[idx].trim().replace(/[^a-zA-Z ]/g, "");
-    if (wordsDone.length===words.length) {
-        console.log("\nCongratulations! You have guessed all the words.".yellow);
-        console.log("Game Over!".yellow);
-        process.exit();
-    }
+
     if (wordsDone.includes(theWord)) {
         theWord = getRandomWord();
     } 
@@ -77,8 +73,8 @@ function playGame() {
         guessWordObj = new word(guessWord);
         canPlay = false;
     }
+    console.log("\n"+guessWordObj.wordString());
     if (!guessWordObj.isWordGuessed()) {
-        console.log("\n"+guessWordObj.wordString());
         askQuestion();
     } else {
         wordsDone.push(guessWord);
@@ -105,6 +101,11 @@ function checkCharacter(char) {
  * Function to prompt user if they want to continue the game
  */
 function playNextWord(){
+    if (wordsDone.length===words.length) {
+        console.log("\nCongratulations! You have guessed all the words.".yellow);
+        console.log("Game Over!".yellow);
+        process.exit();
+    }
     inquirer.prompt([
         {
             type: "confirm",
