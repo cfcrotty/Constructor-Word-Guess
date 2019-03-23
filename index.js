@@ -10,6 +10,7 @@ var canPlay = true;
 var numWord = 0;
 var lettersGuessed = [];
 var wordsDone = [];
+var guessWordObj;
 
 console.log("Word Guess Game Starting...".cyan);
 console.log("Type exit then press Enter to end the game.".red);
@@ -40,9 +41,9 @@ function askQuestion() {
         } else {
             console.log("You already used this letter.");
         }
-        if (remainingGuess > 0) playGame();
-        //add code to play again once it has been guess and there are still words in array
-        else {
+        if (remainingGuess > 0) {
+            playGame();
+        }else {
             console.log("😥 You were not able to guess the word.\n".green);
             canPlay = true;
             remainingGuess = 10;
@@ -57,12 +58,14 @@ function askQuestion() {
 function getRandomWord() {
     var idx = Math.floor(Math.random() * words.length);
     var theWord = words[idx].trim().replace(/[^a-zA-Z ]/g, "");
-    if (wordsDone.includes(theWord)) getRandomWord();
     if (wordsDone.length===words.length) {
-        console.log("Congratulations! You have guessed all the words.".yellow);
+        console.log("\nCongratulations! You have guessed all the words.".yellow);
         console.log("Game Over!".yellow);
         process.exit();
     }
+    if (wordsDone.includes(theWord)) {
+        theWord = getRandomWord();
+    } 
     return theWord;
 }
 /**
@@ -71,11 +74,11 @@ function getRandomWord() {
 function playGame() {
     if (canPlay) {
         guessWord = getRandomWord();
+        guessWordObj = new word(guessWord);
         canPlay = false;
-        guessWord = new word(guessWord);
     }
-    if (!guessWord.isWordGuessed()) {
-        console.log("\n"+guessWord.wordString());
+    if (!guessWordObj.isWordGuessed()) {
+        console.log("\n"+guessWordObj.wordString());
         askQuestion();
     } else {
         wordsDone.push(guessWord);
@@ -92,12 +95,15 @@ function playGame() {
  * @param {string} char -the letter to check
  */
 function checkCharacter(char) {
-    var isTrue = guessWord.checkCharacter(char);
+    var isTrue = guessWordObj.checkCharacter(char);
     if (!isTrue) {remainingGuess--;
     console.log(`You have ${remainingGuess} remaining guess.`.red);
     }
 }
 
+/**
+ * Function to prompt user if they want to continue the game
+ */
 function playNextWord(){
     inquirer.prompt([
         {
